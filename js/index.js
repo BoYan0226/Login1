@@ -11,14 +11,12 @@ const RESET_BUFFER = 1800;
 const AUTO_SCROLL_SPEED = 70; // px / second. Raise this if you want faster auto scroll.
 const WALL_SCROLL_SPEED = 0.72;
 
-// 滚轮停止后多久允许自动滚动恢复，单位 ms
-const WHEEL_PAUSE_TIME = 0;
-
 // 滚轮惯性参数
 const WHEEL_POWER = 0.18;
-const WHEEL_FRICTION = 0.9;
-const WHEEL_MIN_SPEED = 0.15;
+const WHEEL_FRICTION = 0.96;
+const WHEEL_MIN_SPEED = 0.5;
 const WHEEL_MAX_SPEED = 60;
+const WHEEL_PAUSE_TIME = 0;
 
 // 图片到顶端和底端时的透明度
 const EDGE_OPACITY = 0.9;
