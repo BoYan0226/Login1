@@ -147,7 +147,7 @@ const renderGrid = (state) => {
 
   gsap.set(state.gridWrap, {
     y,
-    xPercent: -20,
+    xPercent: 0,
     rotationY: 30,
     transformOrigin: '0% 50%',
   });
