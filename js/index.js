@@ -93,6 +93,8 @@ const prepareGrid = (grid) => {
     });
   }
 
+  const items = Array.from(gridWrap.querySelectorAll('.grid__item'));
+
   grid.style.setProperty('--grid-width', '52vw');
   grid.style.setProperty('--perspective', '3000px');
   grid.style.setProperty('--grid-item-ratio', '0.6667');
@@ -105,10 +107,22 @@ const prepareGrid = (grid) => {
     willChange: 'transform',
   });
 
+  // 固定样式只设置一次，不要每帧反复写。
+  gsap.set(items, {
+    filter: 'none',
+    overflow: 'visible',
+    clipPath: 'none',
+    transformOrigin: '50% 50%',
+    transformStyle: 'preserve-3d',
+    backfaceVisibility: 'visible',
+    force3D: true,
+    willChange: 'transform, opacity',
+  });
+
   return {
     grid,
     gridWrap,
-    items: Array.from(gridWrap.querySelectorAll('.grid__item')),
+    items,
     originalCount: originalItems.length,
     blockHeight: 1,
   };
@@ -135,60 +149,33 @@ const renderGrid = (state) => {
     xPercent: -20,
     rotationY: 30,
     transformOrigin: '0% 50%',
-    transformStyle: 'preserve-3d',
-    force3D: true,
-    willChange: 'transform',
   });
 
-  // 不用 item.getBoundingClientRect() 算位置。
-  // 因为它会读到上一帧 3D 旋转后的尺寸，容易造成下端回缩/抖动。
   const gridRect = state.grid.getBoundingClientRect();
   const baseTop = gridRect.top + state.gridWrap.offsetTop + y;
+  const viewportCenter = window.innerHeight / 2;
 
-  state.items.forEach((item) => {
+  state.items.forEach((item, index) => {
     const centerY = baseTop + item.offsetTop + item.offsetHeight / 2;
-    const distance = (centerY - window.innerHeight / 2) / (window.innerHeight / 2);
+    const distance = (centerY - viewportCenter) / viewportCenter;
     const limited = clamp(distance, -1, 1);
 
     const depth = 60 + (1 - Math.abs(limited)) * 150;
 
-    // 中间最清楚，顶端/底端稍微透明。
     const opacity = clamp(
       CENTER_OPACITY - Math.abs(limited) * (CENTER_OPACITY - EDGE_OPACITY),
       EDGE_OPACITY,
       CENTER_OPACITY,
     );
 
-    // 越靠近屏幕中间、越往前的图片层级越高，减少 3D 排序错误导致的局部消失。
-    const visualPriority = Math.round(depth * 10);
+    const visualPriority = Math.round(depth * 100) + index;
 
     gsap.set(item, {
       rotationX: limited * 30,
-      z: depth,
+      z: depth + index * 0.001,
       zIndex: visualPriority,
       opacity,
-      filter: 'none',
-      overflow: 'visible',
-      clipPath: 'none',
-      transformOrigin: '50% 50%',
-      transformStyle: 'preserve-3d',
-      backfaceVisibility: 'visible',
-      force3D: true,
-      willChange: 'transform, opacity',
     });
-
-    const inner = item.querySelector('.grid__item-inner');
-
-    if (inner) {
-      gsap.set(inner, {
-        backfaceVisibility: 'visible',
-        transformStyle: 'preserve-3d',
-        force3D: true,
-        willChange: 'transform',
-        borderRadius: 'inherit',
-        z: 1,
-      });
-    }
   });
 };
 
@@ -196,14 +183,12 @@ const tick = (time) => {
   const deltaTime = lastFrameTime ? (time - lastFrameTime) / 1000 : 0;
   lastFrameTime = time;
 
-  // 鼠标滚轮松开后，继续补一点惯性滚动。
   if (Math.abs(wheelVelocity) > WHEEL_MIN_SPEED) {
     window.scrollBy(0, wheelVelocity);
     wheelVelocity *= WHEEL_FRICTION;
   } else {
     wheelVelocity = 0;
 
-    // 惯性结束，并且没有处于滚轮暂停期时，恢复自动滚动。
     if (!isAutoPaused) {
       autoRemainder += AUTO_SCROLL_SPEED * deltaTime;
       const wholePixels = Math.trunc(autoRemainder);
@@ -220,10 +205,7 @@ const tick = (time) => {
 };
 
 window.addEventListener('scroll', handlePageScroll, { passive: true });
-
-// 不拦截滚轮，滚轮本身还是正常控制页面。
 window.addEventListener('wheel', pauseAutoScrollByWheel, { passive: true });
-
 window.addEventListener('resize', refreshGridSizes);
 
 preloadImages('.grid__item-inner').then(() => {
