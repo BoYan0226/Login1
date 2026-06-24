@@ -6,9 +6,9 @@
 
 :root {
 	font-size: 16px;
-	--color-text: #fff;
+	--color-text: #000;
 	--color-bg: #e4e4e4;
-	--color-link: #fff;
+	--color-link: #000;
 	--color-link-hover: #907030;
 	--color-title: #907030;
 	--perspective: 1500px;
@@ -43,6 +43,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	scrollbar-width: none;
 	-ms-overflow-style: none;
 }
@@ -257,7 +258,7 @@ body #cdawrap {
 	content: "";
 	width: 1px;
 	height: 2rem;
-	background: #fff;
+	background: #000;
 	position: absolute;
 	top: 100%;
 	left: 50%;
@@ -361,24 +362,12 @@ body #cdawrap {
 	will-change: transform;
 }
 
-.grid__item-shell {
+.grid__item {
 	aspect-ratio: var(--grid-item-ratio);
 	width: 100%;
 	height: auto;
 	position: relative;
 	display: block;
-	overflow: visible;
-	transform-style: preserve-3d;
-	backface-visibility: visible;
-	will-change: transform;
-}
-
-.grid__item {
-	position: absolute;
-	inset: 0;
-	display: block;
-	width: 100%;
-	height: 100%;
 	border-radius: var(--badge-radius);
 	overflow: visible;
 	clip-path: none;
@@ -394,10 +383,9 @@ body #cdawrap {
 		inset 0 2px 0 rgba(255, 255, 255, 0.95),
 		inset 0 -7px 14px rgba(180, 140, 50, 0.18);
 	filter: none;
-	transform: none;
-	transform-style: flat;
+	transform-style: preserve-3d;
 	backface-visibility: visible;
-	will-change: auto;
+	will-change: transform, opacity;
 }
 
 .grid__item::before {
@@ -427,8 +415,6 @@ body #cdawrap {
 	box-shadow:
 		inset 0 0 0 2px rgba(255, 255, 255, 0.82),
 		inset 0 -4px 9px rgba(190, 150, 60, 0.14);
-	transform: none;
-	transform-style: flat;
 	z-index: 1;
 	pointer-events: none;
 	backface-visibility: visible;
@@ -447,14 +433,14 @@ body #cdawrap {
 	background-repeat: no-repeat;
 	background-clip: padding-box;
 	border-radius: var(--badge-window-radius);
-	overflow: visible;
+	overflow: hidden;
 	box-shadow:
 		inset 0 0 0 2px rgba(255, 255, 255, 0.9),
 		0 2px 8px rgba(120, 90, 20, 0.16);
-	transform: scale(1.015);
-	transform-style: flat;
+	transform: translateZ(1px) scale(1.015);
+	transform-style: preserve-3d;
 	backface-visibility: visible;
-	will-change: opacity;
+	will-change: transform, opacity;
 	z-index: 2;
 }
 

@@ -94,15 +94,6 @@ const prepareGrid = (grid) => {
   }
 
   const items = Array.from(gridWrap.querySelectorAll('.grid__item'));
-
-  const shells = items.map((item) => {
-    const shell = document.createElement('div');
-    shell.className = 'grid__item-shell';
-    item.before(shell);
-    shell.appendChild(item);
-    return shell;
-  });
-
   const innerItems = items.map((item) => item.querySelector('.grid__item-inner'));
 
   grid.style.setProperty('--grid-width', '52vw');
@@ -115,10 +106,11 @@ const prepareGrid = (grid) => {
     transformStyle: 'preserve-3d',
     force3D: true,
     willChange: 'transform',
+    overflow: 'visible',
   });
 
   // 固定样式只设置一次，不要每帧反复写。
-  gsap.set(shells, {
+  gsap.set(items, {
     overflow: 'visible',
     clipPath: 'none',
     transformOrigin: '50% 50%',
@@ -128,10 +120,18 @@ const prepareGrid = (grid) => {
     willChange: 'transform, opacity',
   });
 
+  gsap.set(innerItems, {
+    backfaceVisibility: 'visible',
+    transformStyle: 'preserve-3d',
+    force3D: true,
+    willChange: 'transform, opacity',
+    z: 1,
+  });
+
   return {
     grid,
     gridWrap,
-    shells,
+    items,
     innerItems,
     originalCount: originalItems.length,
     blockHeight: 1,
@@ -142,7 +142,7 @@ const gridStates = Array.from(grids).map(prepareGrid);
 
 const refreshGridSizes = () => {
   gridStates.forEach((state) => {
-    const firstRepeatedItem = state.shells[state.originalCount];
+    const firstRepeatedItem = state.items[state.originalCount];
 
     state.blockHeight = Math.max(
       1,
@@ -157,22 +157,31 @@ const renderGrid = (state) => {
 
   gsap.set(state.gridWrap, {
     y,
-    xPercent: -20,
-    rotationY: 30,
+    xPercent: -35,
+    rotationY: 35,
     transformOrigin: '0% 50%',
+    transformStyle: 'preserve-3d',
+    force3D: true,
+    willChange: 'transform',
+    overflow: 'visible',
   });
 
   const gridRect = state.grid.getBoundingClientRect();
   const baseTop = gridRect.top + state.gridWrap.offsetTop + y;
   const viewportCenter = window.innerHeight / 2;
 
-  state.shells.forEach((shell, index) => {
-    const centerY = baseTop + shell.offsetTop + shell.offsetHeight / 2;
+  state.items.forEach((item, index) => {
+    const centerY = baseTop + item.offsetTop + item.offsetHeight / 2;
     const distance = (centerY - viewportCenter) / viewportCenter;
     const limited = clamp(distance, -1, 1);
 
-    const depth = 10 + (1 - Math.abs(limited)) * 300;
+    const TOP_DEPTH = 100;
+    const CENTER_DEPTH = 400;
+    const BOTTOM_DEPTH = 700;
 
+const depth = limited < 0
+  ? TOP_DEPTH + (1 + limited) * (CENTER_DEPTH - TOP_DEPTH)
+  : CENTER_DEPTH + limited * (BOTTOM_DEPTH - CENTER_DEPTH); 
     const opacity = clamp(
       CENTER_OPACITY - Math.abs(limited) * (CENTER_OPACITY - EDGE_OPACITY),
       EDGE_OPACITY,
@@ -183,16 +192,32 @@ const renderGrid = (state) => {
     const columnPriority = 3 - column;
     const visualPriority = Math.round(depth * 100) + columnPriority;
 
-    gsap.set(shell, {
-      rotationX: limited * 30,
+    gsap.set(item, {
+      rotationX: limited * 25,
       z: depth + columnPriority * 0.001,
       zIndex: visualPriority,
       opacity: 1,
+      filter: 'none',
+      transformOrigin: '50% 50%',
+      transformStyle: 'preserve-3d',
+      backfaceVisibility: 'visible',
+      force3D: true,
+      willChange: 'transform, opacity',
+      overflow: 'visible',
     });
 
-    gsap.set(state.innerItems[index], {
-      opacity,
-    });
+    const inner = state.innerItems[index];
+
+    if (inner) {
+      gsap.set(inner, {
+        opacity,
+        backfaceVisibility: 'visible',
+        transformStyle: 'preserve-3d',
+        force3D: true,
+        willChange: 'transform, opacity',
+        z: 1,
+      });
+    }
   });
 };
 
