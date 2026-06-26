@@ -23,7 +23,7 @@
 .login-panel__content {
 	position: absolute;
 	top: 30%;
-	left: 40%;
+	left:35%;
 	width: 400px;
 	transform: translateX(-50%);
 	z-index: 1;
