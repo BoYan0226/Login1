@@ -8,10 +8,8 @@ const RESET_BUFFER = 1800;
 const AUTO_SCROLL_SPEED = 70;
 const WALL_SCROLL_SPEED = 0.72;
 
-// 响应式缩放
-const BASE_SCREEN_WIDTH = 1728;
-const MIN_GRID_SCALE = 0.55;
-const MAX_GRID_SCALE = 1;
+// 固定左侧照片墙缩放，窗口大小变化时不放大/缩小
+const FIXED_GRID_SCALE = 1;
 
 // 滚轮惯性
 const WHEEL_POWER = 0.18;
@@ -24,7 +22,7 @@ const WHEEL_PAUSE_TIME = 0;
 const EDGE_OPACITY = 0.9;
 const CENTER_OPACITY = 1;
 
-// 固定为3列、9张图片
+// 固定 3 列、9 张图片
 const GRID_COLUMNS = 3;
 const IMAGE_COUNT = 9;
 
@@ -36,7 +34,7 @@ let isResettingScroll = false;
 let isAutoPaused = false;
 let wheelPauseTimer = null;
 let wheelVelocity = 0;
-let gridScale = 1;
+let gridScale = FIXED_GRID_SCALE;
 
 const mod = (value, size) => {
   return ((value % size) + size) % size;
@@ -47,11 +45,7 @@ const clamp = (value, min, max) => {
 };
 
 const updateGridScale = () => {
-  gridScale = clamp(
-    window.innerWidth / BASE_SCREEN_WIDTH,
-    MIN_GRID_SCALE,
-    MAX_GRID_SCALE,
-  );
+  gridScale = FIXED_GRID_SCALE;
 };
 
 const pauseAutoScrollByWheel = (event) => {
@@ -121,7 +115,6 @@ const prepareGrid = (grid) => {
     gridWrap.querySelectorAll('.grid__item'),
   );
 
-  // 只使用HTML中的前9张图片
   const originalItems =
     allItems.slice(0, IMAGE_COUNT);
 
@@ -129,14 +122,12 @@ const prepareGrid = (grid) => {
     return null;
   }
 
-  // 删除第10张之后的图片
   allItems
     .slice(IMAGE_COUNT)
     .forEach((item) => {
       item.remove();
     });
 
-  // 复制两组，用于无缝循环
   for (
     let copyIndex = 0;
     copyIndex < 2;
@@ -166,7 +157,7 @@ const prepareGrid = (grid) => {
 
   grid.style.setProperty(
     '--grid-width',
-    '50vw',
+    '864px',
   );
 
   grid.style.setProperty(
@@ -174,7 +165,6 @@ const prepareGrid = (grid) => {
     '3000px',
   );
 
-  // 宽600、高900
   grid.style.setProperty(
     '--grid-item-ratio',
     '0.6667',

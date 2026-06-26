@@ -366,34 +366,28 @@ body #cdawrap {
 
 @media screen and (max-width: 1500px) {
 	:root {
-		--grid-responsive-scale: 0.9;
+		--grid-responsive-scale: 1;
 	}
 }
 
 @media screen and (max-width: 1280px) {
 	:root {
-		--grid-responsive-scale: 0.78;
+		--grid-responsive-scale: 1;
 	}
 }
 
 @media screen and (max-width: 1024px) {
 	:root {
-		--grid-responsive-scale: 0.65;
+		--grid-responsive-scale: 1;
 	}
 }
 
 @media screen and (max-width: 760px) {
 	:root {
-		--grid-responsive-scale: 0.52;
-	}
-
-	.grid {
-		padding-left: 1rem;
-		padding-top: 3rem;
-		padding-bottom: 3rem;
+		--grid-responsive-scale: 1;
 	}
 
 	.grid-wrap {
-		width: 85vw !important;
+		width: 864px !important;
 	}
 }
