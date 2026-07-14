@@ -50,7 +50,9 @@ if (
 		loginForm.classList.add('login-form--code-visible');
 		verificationArea.setAttribute('aria-hidden', 'false');
 		codeInput.disabled = false;
-		submitButtonText.textContent = '验证并登录';
+		submitButton.disabled = false;
+		submitButton.removeAttribute('aria-busy');
+		submitButtonText.textContent = '登入';
 		codeMessage.textContent = '';
 		startCountdown();
 
@@ -64,6 +66,8 @@ if (
 		codeInput.disabled = true;
 		codeInput.value = '';
 		codeMessage.textContent = '';
+		submitButton.disabled = false;
+		submitButton.removeAttribute('aria-busy');
 		submitButtonText.textContent = '获取验证码';
 		clearInterval(countdownTimer);
 	};
@@ -113,6 +117,9 @@ if (
 			return;
 		}
 
-		codeMessage.textContent = '验证码格式正确，正在登录…';
+		codeMessage.textContent = '';
+		submitButton.disabled = true;
+		submitButton.setAttribute('aria-busy', 'true');
+		submitButtonText.textContent = '登入中';
 	});
 }

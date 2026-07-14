@@ -23,7 +23,7 @@
 .login-panel__content {
 	position: absolute;
 	top: 30%;
-	left:25%;
+	left: 25%;
 	width: 400px;
 	transform: translateX(-50%);
 	z-index: 1;
@@ -72,17 +72,18 @@
 	width: 100%;
 	height: 60px;
 	margin: 0;
-	padding: 0 30px 0 30px;
-	background: #fff;
-	border: 3px solid #606060;
+	padding: 0 30px;
+	background: #f7f8f9;
+	border: 2px solid #b1b5b9;
 	border-radius: 20px;
 	cursor: text;
-	transition: border-color 160ms ease, box-shadow 160ms ease;
+	transition: background-color 160ms ease, border-color 160ms ease;
 }
 
 .phone-field:focus-within {
-	border-color: #2f2f2f;
-	box-shadow: 0 0 0 2px rgba(47, 47, 47, 0.08);
+	background: #f4f5f6;
+	border-color: #92989e;
+	box-shadow: none;
 }
 
 .phone-field__label {
@@ -99,10 +100,10 @@
 
 .phone-field__divider {
 	flex: none;
-	width: 3px;
+	width: 2px;
 	height: 30px;
 	margin: 0 26px 0 23px;
-	background: #dadde1;
+	background: #e0e2e4;
 }
 
 .phone-field input {
@@ -164,16 +165,17 @@
 	width: 100%;
 	height: 60px;
 	padding: 0 14px 0 30px;
-	background: #fff;
-	border: 3px solid #606060;
+	background: #f7f8f9;
+	border: 2px solid #b1b5b9;
 	border-radius: 20px;
 	cursor: text;
-	transition: border-color 160ms ease, box-shadow 160ms ease;
+	transition: background-color 160ms ease, border-color 160ms ease;
 }
 
 .verification-field:focus-within {
-	border-color: #2f2f2f;
-	box-shadow: 0 0 0 2px rgba(47, 47, 47, 0.08);
+	background: #f4f5f6;
+	border-color: #92989e;
+	box-shadow: none;
 }
 
 .verification-field__label {
@@ -210,27 +212,28 @@
 
 .verification-field__resend {
 	flex: none;
-	min-width: 78px;
-	height: 36px;
-	padding: 0 12px;
-	color: #5d4a00;
-	background: #fde56b;
+	min-width: 68px;
+	height: auto;
+	padding: 6px 4px;
+	color: #7b8186;
+	background: transparent;
 	border: 0;
-	border-radius: 12px;
+	border-radius: 0;
 	font: inherit;
-	font-size: 13px;
-	font-weight: 800;
+	font-size: 14px;
+	line-height: 1.2;
+	font-weight: 700;
 	cursor: pointer;
-	transition: background-color 160ms ease;
+	transition: color 160ms ease;
 }
 
 .verification-field__resend:hover:not(:disabled) {
-	background: #f7dd55;
+	color: #555b60;
 }
 
 .verification-field__resend:disabled {
-	color: #8f8562;
-	background: #f4ecc3;
+	color: #aaaeb2;
+	background: transparent;
 	cursor: default;
 }
 
@@ -249,7 +252,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 0;
+	gap: 8px;
 	width: 100%;
 	height: 60px;
 	margin-top: 34px;
@@ -263,25 +266,60 @@
 	line-height: 1;
 	font-weight: 800;
 	cursor: pointer;
-	transition: background-color 160ms ease, transform 160ms ease;
+	box-shadow:
+		0 8px 20px rgba(177, 145, 24, 0.16),
+		inset 0 1px 0 rgba(255, 255, 255, 0.55);
+	transition:
+		background-color 160ms ease,
+		box-shadow 160ms ease,
+		transform 160ms ease;
 }
 
 .login-form__arrow {
 	display: none;
 }
 
-.login-form__submit:hover {
+.login-form__submit:hover:not(:disabled) {
 	background: #f7dd55;
+	box-shadow:
+		0 10px 24px rgba(177, 145, 24, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.6);
+	transform: translateY(-1px);
 }
 
-.login-form__submit:active {
-	transform: translateY(1px);
+.login-form__submit:active:not(:disabled) {
+	box-shadow:
+		0 5px 12px rgba(177, 145, 24, 0.16),
+		inset 0 1px 0 rgba(255, 255, 255, 0.48);
+	transform: translateY(0);
 }
 
 .login-form__submit:disabled {
-	color: #998d62;
-	background: #eee2a5;
+	color: #756a3f;
+	background: #d4c16f;
 	cursor: default;
+	box-shadow:
+		0 5px 14px rgba(106, 91, 27, 0.12),
+		inset 0 1px 0 rgba(255, 255, 255, 0.32);
+	transform: none;
+}
+
+.login-form__spinner {
+	display: none;
+	width: 16px;
+	height: 16px;
+	opacity: 0.58;
+}
+
+.login-form__submit[aria-busy="true"] .login-form__spinner {
+	display: block;
+	animation: login-spinner-rotate 800ms linear infinite;
+}
+
+@keyframes login-spinner-rotate {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .login-form__agreement {
@@ -312,7 +350,7 @@
 
 @media screen and (max-width: 760px) {
 	.login-panel {
-		--mobile-panel-top: max(14.4px, calc(100dvh - 519.8px));
+		--mobile-panel-top: max(14.4px, calc(100dvh - 486px));
 		top: var(--mobile-panel-top);
 		right: 14.4px;
 		bottom: auto;
@@ -320,7 +358,7 @@
 		width: auto;
 		min-width: 0;
 		height: auto;
-		min-height: 468px;
+		min-height: 0;
 		max-height: calc(100dvh - var(--mobile-panel-top) - 14.4px);
 		overflow-x: hidden;
 		overflow-y: auto;
@@ -333,10 +371,10 @@
 	}
 
 	.login-panel__brand {
-		top: 26.4px;
+		top: 20px;
 		right: auto;
-		left: 28.8px;
-		width: 151.2px;
+		left: 24px;
+		width: 140px;
 		height: auto;
 	}
 
@@ -350,8 +388,8 @@
 		position: relative;
 		top: auto;
 		left: auto;
-		width: min(570px, calc(100vw - 76.8px));
-		margin: 124.8px auto 40.8px;
+		width: min(400px, calc(100vw - 44px));
+		margin: 88px auto 24px;
 		transform: none;
 	}
 
@@ -359,13 +397,94 @@
 		display: none;
 	}
 
+	.login-panel__heading {
+		margin-bottom: 28px;
+	}
+
 	.login-panel__heading h1 {
-		font-size: 52px;
+		margin-bottom: 8px;
+		font-size: clamp(48px, 13.5vw, 52px);
+		line-height: 1.12;
 	}
 
 	.login-panel__heading p {
-		font-size: 15px;
+		font-size: 14px;
 		line-height: 1.45;
 		font-weight: 600;
+	}
+
+	.phone-field,
+	.verification-field {
+		height: 56px;
+		border-radius: 17px;
+	}
+
+	.phone-field {
+		padding-right: 24px;
+		padding-left: 24px;
+	}
+
+	.phone-field__code,
+	.phone-field input,
+	.verification-field input {
+		font-size: 15px;
+	}
+
+	.phone-field__divider {
+		height: 26px;
+		margin-right: 20px;
+		margin-left: 18px;
+	}
+
+	.verification-field {
+		padding-right: 18px;
+		padding-left: 24px;
+	}
+
+	.login-form--code-visible .verification-area {
+		max-height: 68px;
+		margin-top: 12px;
+	}
+
+	.login-form__submit {
+		height: 56px;
+		margin-top: 28px;
+		border-radius: 17px;
+	}
+
+	.login-form__agreement {
+		margin-top: 18px;
+		font-size: 12px;
+		line-height: 1.5;
+	}
+}
+
+@media screen and (max-width: 760px) and (max-height: 600px) {
+	.login-panel {
+		top: 0;
+		right: 0;
+		left: 0;
+		min-height: 100dvh;
+		max-height: 100dvh;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.login-panel__content {
+		margin-top: 116px;
+		margin-bottom: 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.login-form__submit,
+	.phone-field,
+	.verification-field,
+	.verification-area {
+		transition: none;
+	}
+
+	.login-form__submit[aria-busy="true"] .login-form__spinner {
+		animation-duration: 1600ms;
 	}
 }
