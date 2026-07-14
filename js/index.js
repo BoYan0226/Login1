@@ -5,7 +5,7 @@ const grids = document.querySelectorAll('.grid');
 const RESET_SCROLL_Y = 6000;
 const RESET_BUFFER = 1800;
 
-const AUTO_SCROLL_SPEED = 70;
+const AUTO_SCROLL_SPEED = 150;
 const WALL_SCROLL_SPEED = 0.72;
 
 // 固定左侧照片墙缩放，窗口大小变化时不放大/缩小

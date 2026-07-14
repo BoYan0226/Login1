@@ -23,7 +23,7 @@
 .login-panel__content {
 	position: absolute;
 	top: 30%;
-	left:35%;
+	left:25%;
 	width: 400px;
 	transform: translateX(-50%);
 	z-index: 1;
@@ -44,7 +44,7 @@
 }
 
 .login-panel__heading h1 {
-	margin: 0 0 9px;
+	margin: 0 0 10px;
 	color: #262626;
 	font-size: 75px;
 	line-height: 1.16;
@@ -75,7 +75,7 @@
 	padding: 0 30px 0 30px;
 	background: #fff;
 	border: 3px solid #606060;
-	border-radius: 19px;
+	border-radius: 20px;
 	cursor: text;
 	transition: border-color 160ms ease, box-shadow 160ms ease;
 }
@@ -146,7 +146,7 @@
 	color: #5d4a00;
 	background: #fde56b;
 	border: 0;
-	border-radius: 19px;
+	border-radius: 20px;
 	font: inherit;
 	font-size: 16px;
 	line-height: 1;
